@@ -1,5 +1,6 @@
 const knex = require('../database/knex')
 const AppError = require("../utils/AppError")
+const {hash} = require('bcryptjs')
 
 class UsersController {
    async create(request, response) {
@@ -13,14 +14,16 @@ class UsersController {
               throw new AppError("Este e-mail já pertence a outro usuário.")
             }
           }
+
+        const hashedPassword = await hash(password, 8)  
         
         await users().insert({
             name,
             email,
-            password
+            password: hashedPassword
         })
 
-        return response.json({"name": name, "email": email, "password": password})
+        return response.json({"alert": `usuário ${name} cadastrado`})
    }      
 }
 
