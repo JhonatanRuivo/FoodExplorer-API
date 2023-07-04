@@ -28,23 +28,25 @@ class UsersController {
     const { id } = request.params
 
     const [user] = await knex('users').where({id})
-
+    
     if (!user) {
       throw new AppError("Usuário não encontrado")
     }
 
-    const [userWithUpdatedEmail] = await knex('users').where({email})
+    if(email){
+      const [userWithUpdatedEmail] = await knex('users').where({email})
 
     if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
       throw new AppError("Este e-mail já pertence a outro usuário.")
-          }
-
-   user.name = name ?? user.name
-   user.email = email ?? user.email
-
+      }
+    }
+          
+    user.name = name ?? user.name
+    user.email = email ?? user.email
+      
     if(password && !old_password) {
       throw new AppError("Você precisa informar senha antiga para atualizar a nova senha.")
-    }
+    } 
 
     if(password && old_password) { 
       const checkPassword = await compare(old_password, user.password)
@@ -56,7 +58,7 @@ class UsersController {
     }
 
 
-    await knex('users').where({ id: user.id }).update({
+    await knex('users').where({id}).update({
       name: user.name,
       email: user.email,
       password: user.password,
