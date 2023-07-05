@@ -1,11 +1,12 @@
 
 exports.up = knex => knex.schema.createTable("dishes", table=> {
-    table.increments("id")
-    table.text("name")
+    table.increments("id").primary()
+    table.integer("user_id").references("id").inTable("users")
+    table.varchar("name")
     table.text("description")
-    table.text("category")
-    table.text("price")
-    table.text("image")
+    table.varchar("category")
+    table.double("price")
+    table.varchar("image")
     table.timestamp("created_at").defaultTo(knex.fn.now())
     table.timestamp("updated_at").defaultTo(knex.fn.now())
 
