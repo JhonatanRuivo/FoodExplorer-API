@@ -39,11 +39,12 @@ class UsersController {
     if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
       throw new AppError("Este e-mail já pertence a outro usuário.")
       }
-    }
-          
+    } 
+     
     user.name = name ?? user.name
     user.email = email ?? user.email
       
+    
     if(password && !old_password) {
       throw new AppError("Você precisa informar senha antiga para atualizar a nova senha.")
     } 
@@ -68,6 +69,7 @@ class UsersController {
     
     return response.json("updated success")
    } 
+
 }
 
 module.exports = UsersController
