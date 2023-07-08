@@ -43,6 +43,13 @@ class DishesController {
         return response.json("deletado com sucesso!")
     }
 
+    async index(request, response) {
+    const dishes = await knex("dishes").orderBy("name")
+
+    response.json(dishes)
+    }
+
+
 }
 
 module.exports = DishesController
