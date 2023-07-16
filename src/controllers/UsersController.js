@@ -1,43 +1,43 @@
 const knex = require('../database/knex')
-const AppError = require("../utils/AppError")
+const AppError = require('../utils/AppError')
 const {hash, compare} = require('bcryptjs')
 
 class UsersController {
-   async create(request, response) {
-        const {name, email, password, } = request.body
+  async create(request, response) {
+    const {name, email, password, } = request.body
                 
-            const [checkUserExists] = await knex('users').where({ email })
+    const [checkUserExists] = await knex('users').where({ email })
             
-            if (checkUserExists) {
-              throw new AppError("Este e-mail já pertence a outro usuário.")
-            }
+    if (checkUserExists) {
+      throw new AppError('Este e-mail já pertence a outro usuário.')
+    }
           
-        const hashedPassword = await hash(password, 8)  
+    const hashedPassword = await hash(password, 8)  
         
-        await knex('users').insert({
-            name,
-            email,
-            password: hashedPassword
-        })
+    await knex('users').insert({
+      name,
+      email,
+      password: hashedPassword
+    })
 
-        return response.json({"alert": `usuário ${name} cadastrado`})
-   }   
+    return response.json({'alert': `usuário ${name} cadastrado`})
+  }   
    
-   async update(request, response) {
-     const { id } = request.params
+  async update(request, response) {
+    const { id } = request.params
     const { name, email, password, old_password } = request.body
 
     const [user] = await knex('users').where({id})
     
     if (!user) {
-      throw new AppError("Usuário não encontrado")
+      throw new AppError('Usuário não encontrado')
     }
 
     if(email){
       const [userWithUpdatedEmail] = await knex('users').where({email})
 
-    if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
-      throw new AppError("Este e-mail já pertence a outro usuário.")
+      if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
+        throw new AppError('Este e-mail já pertence a outro usuário.')
       }
     } 
      
@@ -46,13 +46,13 @@ class UsersController {
       
     
     if(password && !old_password) {
-      throw new AppError("Você precisa informar senha antiga para atualizar a nova senha.")
+      throw new AppError('Você precisa informar senha antiga para atualizar a nova senha.')
     } 
 
     if(password && old_password) { 
       const checkPassword = await compare(old_password, user.password)
       if(!checkPassword) {
-        throw new AppError("Senha incorreta")
+        throw new AppError('Senha incorreta')
       }
       
       user.password = await hash(password, 8)
@@ -67,8 +67,8 @@ class UsersController {
     })
 
     
-    return response.json("atualizado com sucesso")
-   } 
+    return response.json('atualizado com sucesso')
+  } 
 
 }
 

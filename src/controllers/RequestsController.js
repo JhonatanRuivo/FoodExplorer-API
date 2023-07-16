@@ -1,25 +1,25 @@
 const knex = require('../database/knex')
 
 class RequestsController {
-    async create (request, response) {
-        const {user_id} = request.params
-        const {dish_id} = request.body
+  async create (request, response) {
+    const {user_id} = request.params
+    const {dish_id} = request.body
 
-        await knex("requests").insert({
-            user_id,
-            dish_id
-        })
+    await knex('requests').insert({
+      user_id,
+      dish_id
+    })
 
-        return response.json("Pedido criado.")
-    }
+    return response.json('Pedido criado.')
+  }
 
-    async index (request, response) {
-        const {user_id} = request.params
+  async index (request, response) {
+    const {user_id} = request.params
 
-       const dishes = await knex("requests").where({user_id})
+    const dishes = await knex('requests').where({user_id})
     
-       return response.json(dishes)
-    }
+    return response.json(dishes)
+  }
 
 }
 
