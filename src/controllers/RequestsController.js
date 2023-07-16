@@ -12,6 +12,15 @@ class RequestsController {
 
         return response.json("Pedido criado.")
     }
+
+    async index (request, response) {
+        const {user_id} = request.params
+
+       const dishes = await knex("requests").where({user_id})
+    
+       return response.json(dishes)
+    }
+
 }
 
 module.exports = RequestsController
