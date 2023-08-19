@@ -10,4 +10,18 @@ function ensureAuthenticated(request, response, next) {
   }
 
   const [, token] = authHeader.split(' ')
+
+  try {
+    const { sub: user_id } = verify(token, authConfig.jwt.secret)
+
+    request.user = {
+      id: Number(user_id),
+    }
+
+    return next()
+  } catch {
+    throw new AppError('JWT token inválido', 401)
+  }
 }
+
+module.exports = ensureAuthenticated
