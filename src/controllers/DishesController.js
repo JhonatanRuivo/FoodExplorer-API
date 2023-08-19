@@ -3,9 +3,8 @@ const AppError = require('../utils/AppError')
 
 class DishesController {
   async create(request, response) {
-    const { image, name, category, price, description, ingredients } =
-      request.body
-    const { user_id } = request.params
+    const { image, name, category, price, description, ingredients } = request.body
+    const user_id = request.user.id
 
     const dish_id = await knex('dishes').insert({
       user_id,
@@ -32,9 +31,7 @@ class DishesController {
     const { id } = request.params
 
     const dishes = await knex('dishes').where({ id }).first()
-    const ingredients = await knex('ingredients')
-      .where({ dish_id: id })
-      .orderBy('name')
+    const ingredients = await knex('ingredients').where({ dish_id: id }).orderBy('name')
 
     return response.json({ ...dishes, ingredients })
   }
@@ -53,9 +50,7 @@ class DishesController {
     let dishes
 
     if (ingredients) {
-      const filterIngredients = ingredients
-        .split(',')
-        .map((ingredient) => ingredient.trim())
+      const filterIngredients = ingredients.split(',').map((ingredient) => ingredient.trim())
 
       dishes = await knex('ingredients')
         .select(['dishes.id', 'dishes.name'])
@@ -72,9 +67,7 @@ class DishesController {
 
     const nameIngredients = await knex('ingredients')
     const dishesWithIngredients = dishes.map((dish) => {
-      const dishIngredient = nameIngredients.filter(
-        (ingredient) => ingredient.dish_id === dish.id,
-      )
+      const dishIngredient = nameIngredients.filter((ingredient) => ingredient.dish_id === dish.id)
 
       return {
         ...dish,
@@ -87,8 +80,7 @@ class DishesController {
 
   async update(request, response) {
     const { id } = request.params
-    const { image, name, category, price, description, ingredients } =
-      request.body
+    const { image, name, category, price, description, ingredients } = request.body
 
     const [dish] = await knex('dishes').where({ id })
 
