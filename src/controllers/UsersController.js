@@ -20,7 +20,7 @@ class UsersController {
       password: hashedPassword,
     })
 
-    return response.json({ alert: `usuário ${name} cadastrado` })
+    return response.json()
   }
 
   async update(request, response) {
@@ -45,9 +45,7 @@ class UsersController {
     user.email = email ?? user.email
 
     if (password && !old_password) {
-      throw new AppError(
-        'Você precisa informar senha antiga para atualizar a nova senha.'
-      )
+      throw new AppError('Você precisa informar senha antiga para atualizar a nova senha.')
     }
 
     if (password && old_password) {

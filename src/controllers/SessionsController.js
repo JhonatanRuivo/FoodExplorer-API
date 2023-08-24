@@ -9,6 +9,7 @@ class SessionsController {
     const { email, password } = request.body;
 
     const user = await knex("users").where({ email }).first();
+    
 
     if (!user) {
       throw new AppError("Email e/ou senha inválida!", 401);
@@ -26,6 +27,7 @@ class SessionsController {
       subject: String(user.id),
       expiresIn,
     });
+
 
     return response.json({ user, token });
   }
