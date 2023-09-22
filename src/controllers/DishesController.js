@@ -3,28 +3,28 @@ const AppError = require('../utils/AppError')
 
 class DishesController {
   async create(request, response) {
-    const { image, name, category, price, description, ingredients } = request.body
+    const { name, category, price, description, ingredients } = request.body
     const user_id = request.user.id
 
-    const dish_id = await knex('dishes').insert({
+    const [dish_id] = await knex('dishes').insert({
       user_id,
-      image,
       name,
       category,
       price,
       description,
     })
 
-    const ingredientsInsert = ingredients.map((ingredients) => {
-      return {
-        dish_id: dish_id[0],
-        name: ingredients,
-      }
-    })
+    
+     const ingredientsInsert = ingredients.map((ingredient) => {
+        return {
+          name: ingredient,
+          dish_id,
+        }
+      })
 
     await knex('ingredients').insert(ingredientsInsert)
 
-    return response.json(`Prato ${name} cadastrado!`)
+    return response.status(201).json()
   }
 
   async show(request, response) {

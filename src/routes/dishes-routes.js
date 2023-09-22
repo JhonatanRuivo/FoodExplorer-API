@@ -1,13 +1,13 @@
-const { Router } = require('express')
 const multer = require('multer')
+const { Router } = require('express')
 const uploadConfig = require('../configs/upload')
 
 const DishesController = require('../controllers/DishesController')
 const ensureAuthenticated = require('../middlewares/ensureAuthenticated')
 const DishesImageController = require('../controllers/DishesImageController')
 
-const dishesRouter = Router()
 const upload = multer(uploadConfig.MULTER)
+const dishesRouter = Router()
 
 const dishesController = new DishesController()
 const dishesImageController = new DishesImageController()

@@ -5,7 +5,7 @@ exports.up = knex => knex.schema.createTable('dishes', table=> {
   table.varchar('name')
   table.text('description')
   table.varchar('category')
-  table.double('price')
+  table.double('price', [4], [2])
   table.varchar('image')
   table.timestamp('created_at').defaultTo(knex.fn.now())
   table.timestamp('updated_at').defaultTo(knex.fn.now())

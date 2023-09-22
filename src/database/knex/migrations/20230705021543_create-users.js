@@ -4,7 +4,13 @@ exports.up = (knex) =>
     table.varchar('name')
     table.varchar('email')
     table.varchar('password')
-    table.boolean('isAdmin').defaultTo(false)
+    table
+      .enum('role', ['admin', 'customer'], {
+        useNative: true,
+        enumName: 'roles',
+      })
+      .notNullable()
+      .defaultTo('customer')
     table.varchar('avatar').nullable()
     table.timestamp('created_at').defaultTo(knex.fn.now())
     table.timestamp('updated_at').defaultTo(knex.fn.now())

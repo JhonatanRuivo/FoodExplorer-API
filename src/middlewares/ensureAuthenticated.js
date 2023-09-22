@@ -22,6 +22,6 @@ function ensureAuthenticated(request, response, next) {
   } catch {
     throw new AppError('JWT token inválido', 401)
   }
-}
+}                                           
 
 module.exports = ensureAuthenticated
