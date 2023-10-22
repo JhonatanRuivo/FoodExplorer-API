@@ -24,7 +24,7 @@ class SessionsController {
 
     const token = sign({ role: user.role }, secret, {
       subject: String(user.id),
-      expiresIn,
+      expiresIn: "1d"
     })
 
     return response.json({ user, token })

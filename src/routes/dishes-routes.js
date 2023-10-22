@@ -13,20 +13,10 @@ const dishesController = new DishesController()
 
 dishesRouter.use(ensureAuthenticated)
 
-dishesRouter.post(
-  '/',
-  verifyUserAuthorization('admin'),
-  upload.single('image'),
-  dishesController.create
-)
+dishesRouter.post('/', verifyUserAuthorization('admin'), upload.single('image'), dishesController.create)
 dishesRouter.get('/', dishesController.index)
 dishesRouter.get('/:id', dishesController.show)
-dishesRouter.put(
-  '/:id',
-  verifyUserAuthorization('admin'),
-  upload.single('image'),
-  dishesController.update
-)
+dishesRouter.put('/:id', verifyUserAuthorization('admin'), upload.single('image'), dishesController.update)
 dishesRouter.delete('/:id', verifyUserAuthorization('admin'), dishesController.delete)
 
 module.exports = dishesRouter
