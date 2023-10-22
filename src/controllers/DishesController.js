@@ -58,9 +58,13 @@ class DishesController {
   async delete(request, response) {
     const { id } = request.params
 
-    await knex('dishes').where({ id }).delete()
+    try {
+      await knex('dishes').where({ id }).delete()
 
     return response.json('deletado com sucesso!')
+    } catch (error) {
+      return response.AppError(error.message)
+    }
   }
 
   async index(request, response) {
