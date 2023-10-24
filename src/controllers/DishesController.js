@@ -61,7 +61,7 @@ class DishesController {
     try {
       await knex('dishes').where({ id }).delete()
 
-    return response.json('deletado com sucesso!')
+      return response.json('deletado com sucesso!')
     } catch (error) {
       return response.AppError(error.message)
     }
@@ -105,14 +105,13 @@ class DishesController {
     try {
       const { id } = request.params
 
-      const { name, category, price, description, ingredients} = request.body
+      const { name, category, price, description, ingredients } = request.body
       const file = request.file
 
       const dish = await knex('dishes').where({ id }).first()
 
       if (file && file.filename) {
         const diskStorage = new DiskStorage()
-
 
         if (dish.image) {
           await diskStorage.deleteFile(dish.image)
@@ -132,10 +131,23 @@ class DishesController {
       dish.price = price ?? dish.price
       dish.description = description ?? dish.description
 
-      const ingredientsInsert = ingredients.map((name) => ({
-        name,
-        dish_id: dish.id,
-      }))
+      const hasOnlyOneIngredient = typeof ingredients === 'string'
+
+      let ingredientsInsert
+
+      if (hasOnlyOneIngredient) {
+        ingredientsInsert = {
+          name: ingredients,
+          dish_id: dish.id,
+        }
+      } else if (ingredients.length > 1) {
+        ingredientsInsert = ingredients.map((ingredient) => {
+          return {
+            dish_id: dish.id,
+            name: ingredient,
+          }
+        })
+      }
 
       await knex('dishes').where({ id }).update(dish)
       await knex('dishes').where({ id }).update('updated_at', knex.fn.now())
@@ -143,7 +155,7 @@ class DishesController {
       await knex('ingredients').where({ dish_id: id }).delete()
       await knex('ingredients').insert(ingredientsInsert)
 
-      return response.status(200).json({id})
+      return response.status(200).json({ id })
     } catch (error) {
       console.log(error.message)
       return response.status(400).json(error)
