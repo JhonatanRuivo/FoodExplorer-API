@@ -85,10 +85,6 @@ $ npm run seed
 # Execute a aplicação em modo de desenvolvimento
 $ npm run dev
 
-# Login do admin
-$ email: admin@email.com
-$ password: 123456
-
 # O servidor inciará na porta:3333 - acesse <http://localhost:3333>
 ```
 
